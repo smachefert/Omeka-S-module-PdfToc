@@ -5,8 +5,8 @@ Pdf Toc (plugin upgraded for Omeka S)
 Summary
 -----------
 
-Pdf toc add table of contents data from a pdf to a media.
-That allow index searching within Universal Viewer plugin for omeka S 
+Omeka's module that add table of contents metadata to a pdf media.
+That allow index searching within [Universal Viewer](https://github.com/Daniel-KM/Omeka-S-module-UniversalViewer) plugin for omeka S with [IIIF-Server](https://github.com/bubdxm/Omeka-S-module-IiifServer)
 
 Installation
 ------------
@@ -51,7 +51,7 @@ See online [Pdf Toc issues](https://github.com/bubdxm/Omeka-S-module-PdfToc/issu
 License
 -------
 
-This plugin is published under [GNU/GPL].
+This module is published under [GNU/GPL].
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
