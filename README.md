@@ -6,7 +6,7 @@ Summary
 -----------
 
 Omeka's module that add table of contents metadata to a pdf media.
-That allow index searching within [Universal Viewer](https://github.com/Daniel-KM/Omeka-S-module-UniversalViewer) plugin for omeka S with [IIIF-Server](https://github.com/bubdxm/Omeka-S-module-IiifServer)
+That allow index searching within [Universal Viewer](https://github.com/Daniel-KM/Omeka-S-module-UniversalViewer) module for omeka S with [IIIF-Server](https://github.com/bubdxm/Omeka-S-module-IiifServer)
 
 Installation
 ------------
