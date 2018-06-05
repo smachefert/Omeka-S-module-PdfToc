@@ -1,38 +1,37 @@
-Extract OCR (plugin upgraded for Omeka S)
+Pdf Toc (plugin upgraded for Omeka S)
 =============================
 
 
 Summary
 -----------
 
-Omeka plugin to extract OCR text in XML from PDF files, allowing fulltext searching within Universal Viewer plugin for omeka S ( need [IIIF-Search module](https://github.com/bubdxm/Omeka-S-module-IiifSearch) ).
+Pdf toc add table of contents data from a pdf to a media.
+That allow index searching within Universal Viewer plugin for omeka S 
 
 Installation
 ------------
-- This plugin needs pdftohtml command-line tool on your server
+- This plugin needs pdftk command-line tool on your server
 
 ```
     sudo apt-get install poppler-utils
 ```
 
-- Upload the Extract OCR plugin folder into your plugins folder on the server;
-- you can install the plugin via github
+- you can install the module via github
 
 ```
     cd omeka-s/modules  
     git clone git@github.com:bubdxm/Omeka-S-module-ExtractOcr.git "ExtractOcr"
 ```
 
-- Install it from the admin → Modules → Extract Ocr -> install
-- Extract OCR automaticaly allow the upload of XML files 
+- Install it from the admin → Modules → PdfToc -> install
 
-Using the Extract OCR Plugin
+Using the Pdf Toc module
 ---------------------------
 
 - Create an item
 - Add PDF file(s) to this item
 - Save Item
-- To locate extracted OCR xml file, select the item to which the PDF is attached. Normally, you should see an XML file attached to the record with the same filename than the pdf file. 
+- If you go to the media's view you should see dcterms:tableofcontents filled. 
 
 
 Optional plugins
@@ -41,14 +40,12 @@ Optional plugins
 - [Universal Viewer](https://github.com/Daniel-KM/Omeka-S-module-UniversalViewer) : Module for Omeka S that adds the IIIF specifications in order to act like an IIPImage server, and the UniversalViewer, a unified online player for any file. It can display books, images, maps, audio, movies, pdf, 3D views, and anything else as long as the appropriate extensions are installed.
 
 - [IIIF-Server](https://github.com/bubdxm/Omeka-S-module-IiifServer) : Module for Omeka S that adds the IIIF specifications to serve any images and medias. 
-
-- [IIIF-Search](https://github.com/bubdxm/Omeka-S-module-IiifSearch) :  Module for Omeka S that adds IIIF Search Api for  fulltext searching on universal viewer.
-
+**Here, permit to add the table of contents if you display pdf's images in unviersal viewer  **
 
 Troubleshooting
 ---------------
 
-See online [Extract OCR issues](https://github.com/bubdxm/Omeka-S-module-ExtractOcr/issues).
+See online [Pdf Toc issues](https://github.com/bubdxm/Omeka-S-module-PdfToc/issues).
 
 
 License
