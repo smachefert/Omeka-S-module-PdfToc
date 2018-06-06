@@ -47,8 +47,14 @@ class Module extends AbstractModule
     public function attachListeners(SharedEventManagerInterface $sharedEventManager)
     {
         $sharedEventManager->attach(
-            'Omeka\Api\Adapter\MediaAdapter',
+            'Omeka\Api\Adapter\ItemAdapter',
             'api.create.post',
+            [$this, 'extractToc']
+        );
+
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\ItemAdapter',
+            'api.update.post',
             [$this, 'extractToc']
         );
     }
@@ -57,19 +63,23 @@ class Module extends AbstractModule
     public function extractToc(\Zend\EventManager\Event $event)
     {
         $response = $event->getParams()['response'];
-        $media = $response->getContent();
-        $fileExt = $media->getExtension();
+        $item = $response->getContent();
 
-        $filePath = OMEKA_PATH . '/files/original/' . $media->getStorageId() . '.' . $fileExt;
+        foreach ($item->getMedia() as $media ) {
+            $fileExt = $media->getExtension();
+            if (in_array($fileExt, array('pdf', 'PDF'))) {
 
-        if (in_array($fileExt, array('pdf', 'PDF'))) {
-            $this->serviceLocator->get('Omeka\Job\Dispatcher')->dispatch('PdfToc\Job\ExtractToc',
-                [
-                    'itemId' => $media->getItem()->getId(),
-                    'mediaId' => $media->getId(),
-                    'filePath' => $filePath,
-                    'iiifUrl' => 'http://' . $_SERVER['HTTP_HOST'] . '/omeka-s/iiif',
-                ]);
+                $filePath = OMEKA_PATH . '/files/original/' . $media->getStorageId() . '.' . $fileExt;
+
+                $this->serviceLocator->get('Omeka\Job\Dispatcher')->dispatch('PdfToc\Job\ExtractToc',
+                    [
+                        'itemId' => $media->getItem()->getId(),
+                        'mediaId' => $media->getId(),
+                        'filePath' => $filePath,
+                        'iiifUrl' => 'http://' . $_SERVER['HTTP_HOST'] . '/omeka-s/iiif',
+                    ]);
+            }
         }
     }
 }
+

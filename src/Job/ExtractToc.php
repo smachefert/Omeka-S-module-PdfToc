@@ -24,13 +24,12 @@ class ExtractToc extends AbstractJob
         $this->iiifUrl  = $this->getArg('iiifUrl');
 
         $toc = $this->pdfToToc($this->filePath );
-        
         $data = [
-            "dcterms:tableOfContents" => [
+            "dcterms:tableOfContents" => [[
                 "type"=> "literal",
                 "property_id"=> 18,
-                "@value"=> $toc,
-            ],
+                "@value"=> $toc
+            ]],
         ];
 
         $apiManager->update('media', $this->mediaId, $data, [], ['isPartial' => true, 'collectionAction' => 'append']);
@@ -53,9 +52,9 @@ class ExtractToc extends AbstractJob
 
             $content = [];
             $i = 0;
-            $this->extractContent($i, 1, $content, $dump_data_array);
+            $this->extractContent($i, 1, $content, $dump_data_array, $content);
             $toc = $this->formatContent($content, "");
-            return json_encode($toc);
+            return json_encode($toc );
         } else {
             return json_encode([]);
         }
@@ -78,7 +77,7 @@ class ExtractToc extends AbstractJob
      *           ...
      *      ]
      */
-    protected function extractContent(&$i, $level, &$content, $data ) {
+    protected function extractContent(&$i, $level, &$content, $data, &$parent ) {
 
         if ($i+3 >= sizeof($data)) {
             return $content;
@@ -104,7 +103,7 @@ class ExtractToc extends AbstractJob
         if ( $newContent['level'] == $level) {
             $i+=4;
             $content[] = $newContent;
-            $this->extractContent($i, $level, $content, $data);
+            $this->extractContent($i, $level, $content, $data, $parent);
         }
 
         if ( $newContent['level'] > $level) {
@@ -112,14 +111,14 @@ class ExtractToc extends AbstractJob
             $content[key($content)]['otherContent'][] = $newContent;
             $i+=4;
             $r = $newContent['level'];
-            $this->extractContent($i, $r, $content, $data);
+            $this->extractContent($i, $r, $content[key($content)]['otherContent'], $data, $parent);
         }
 
         if ( $newContent['level'] < $level) {
             $i+=4;
-            $content[] = $newContent;
+            $parent[] = $newContent;
             $r = $newContent['level'];
-            $this->extractContent($i, $r, $content, $data);
+            $this->extractContent($i, $r, $parent, $data,$parent);
         }
     }
 
