@@ -1,4 +1,4 @@
-Pdf Toc (plugin upgraded for Omeka S)
+Pdf Toc (module upgraded for Omeka S)
 =============================
 
 
@@ -10,7 +10,7 @@ That allow index searching within [Universal Viewer](https://github.com/Daniel-K
 
 Installation
 ------------
-- This plugin needs pdftk command-line tool on your server
+- This module needs pdftk command-line tool on your server
 
 ```
     sudo apt-get install poppler-utils
@@ -20,7 +20,7 @@ Installation
 
 ```
     cd omeka-s/modules  
-    git clone git@github.com:bubdxm/Omeka-S-module-ExtractOcr.git "ExtractOcr"
+    git clone git@github.com:bubdxm/Omeka-S-module-PdfToc.git "PdfToc"
 ```
 
 - Install it from the admin → Modules → PdfToc -> install
