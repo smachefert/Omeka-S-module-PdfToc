@@ -10,12 +10,17 @@ class ExtractToc extends AbstractJob
     protected $filePath;
     protected $iiifUrl;
 
+    private $logger;
+
 
     /**
      * @brief add universal viewer structure for pdf's tables of contents
      *        in dcterms:tableOfContents by default
      */
     public function perform() {
+        $this->logger = $this->getServiceLocator()->get('Omeka\Logger');
+        $this->logger->info("ExtractToc function start");
+
         $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
 
         $this->itemId   = $this->getArg('itemId');
