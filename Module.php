@@ -25,11 +25,12 @@ class Module extends AbstractModule
     public function install(ServiceLocatorInterface $serviceLocator)
     {
         $logger = $serviceLocator->get('Omeka\Logger');
+        $t = $serviceLocator->get('MvcTranslator');
         // Don't install if the pdftotext command doesn't exist.
         // See: http://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
         if ((int) shell_exec('hash pdftk 2>&- || echo 1')) {
             $logger->info("pdftk not found");
-            throw new ModuleCannotInstallException(__('The pdftk command-line utility '
+            throw new ModuleCannotInstallException($t->translate('The pdftk command-line utility '
                 . 'is not installed. pdftk must be installed to install this plugin.'));
         }
     }
