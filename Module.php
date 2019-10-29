@@ -60,9 +60,14 @@ class Module extends AbstractModule
         );
     }
 
+    private function iiifUrl() {
+        $url = $this->getServiceLocator()->get('ViewHelperManager')->get('url');
+        return $url('top', [], ['force_canonical' => true])."iiif";
+    }
 
     public function extractToc(\Zend\EventManager\Event $event)
     {
+        $logger = $this->getServiceLocator()->get("Omeka\Logger");
         $response = $event->getParams()['response'];
         $item = $response->getContent();
 
@@ -77,7 +82,7 @@ class Module extends AbstractModule
                         'itemId' => $media->getItem()->getId(),
                         'mediaId' => $media->getId(),
                         'filePath' => $filePath,
-                        'iiifUrl' => 'http://' . $_SERVER['HTTP_HOST'] . '/omeka-s/iiif',
+                        'iiifUrl' => $this->iiifUrl(),
                     ]);
             }
         }

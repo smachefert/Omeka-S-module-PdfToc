@@ -52,6 +52,7 @@ class ExtractToc extends AbstractJob
         $dump_data = shell_exec($command);
 
         if (is_string($dump_data)) {
+            $dump_data = preg_replace("/^.*(Bookmark.*)$/isU", "$1", $dump_data);
             $dump_data_array = preg_split("/\n/", $dump_data);
             $dump_data_array = array_filter($dump_data_array, function($var) {
                 return preg_match("/.*Bookmark.*/", $var);
