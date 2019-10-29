@@ -5,8 +5,6 @@
 	$application = Omeka\Mvc\Application::init(require OMEKA_PATH . '/application/config/application.config.php');
 	$serviceLocator = $application->getServiceManager();
 	$entityManager = $serviceLocator->get('Omeka\EntityManager');
-	$pdfToc = $serviceLocator->get("Omeka\PdfToc");
-	exit;
 
 	// Using user #1, admin in our case, to be allowed to update the media
 	$user = $entityManager->find('Omeka\Entity\User', 1);
