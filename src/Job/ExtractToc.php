@@ -52,8 +52,10 @@ class ExtractToc extends AbstractJob
         $dump_data = shell_exec($command);
 
         if (is_string($dump_data)) {
-            $dump_data = preg_replace("/^.*(Bookmark.*)$/isU", "$1", $dump_data);
             $dump_data_array = preg_split("/\n/", $dump_data);
+            $dump_data_array = array_filter($dump_data_array, function($var) {
+                return preg_match("/.*Bookmark.*/", $var);
+            });
 
             $content = [];
             $i = 0;
@@ -167,7 +169,7 @@ class ExtractToc extends AbstractJob
                 'canvases' => [$this->iiifUrl . '/' . $this->itemId . '/canvas/p' . $link['numPage']]
             ];
 
-            if ( $link['otherContent'] ) {
+            if ( key_exists('otherContent', $link) && $link['otherContent'] ) {
                 $newContent['ranges'] = $this->formatContent($link['otherContent'], $r );
             }
 
