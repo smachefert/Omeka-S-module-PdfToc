@@ -37,7 +37,7 @@ class ExtractToc extends AbstractJob
             ]],
         ];
 
-        $apiManager->update('media', $this->mediaId, $data, [], ['isPartial' => true, 'collectionAction' => 'append']);
+        $apiManager->update('media', $this->mediaId, $data, [], ['isPartial' => true, 'collectionAction' => 'replace']);
     }
 
     /**
