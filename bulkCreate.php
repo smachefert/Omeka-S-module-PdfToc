@@ -5,6 +5,8 @@
 	$application = Omeka\Mvc\Application::init(require OMEKA_PATH . '/application/config/application.config.php');
 	$serviceLocator = $application->getServiceManager();
 	$entityManager = $serviceLocator->get('Omeka\EntityManager');
+	$pdfToc = $serviceLocator->get("Omeka\PdfToc");
+	exit;
 
 	// Using user #1, admin in our case, to be allowed to update the media
 	$user = $entityManager->find('Omeka\Entity\User', 1);
@@ -25,7 +27,7 @@
 			if ($toc) {
 				print "#".$media->id()." already has toc, skipping\n";
 			} else {
-				$filePath = "/var/www/omeka-s/files/original/".$media->filename();
+				$filePath = OMEKA_PATH . "/files/original/".$media->filename();
 				print "#".$media->id()." sent to ExtractToc job\n";
 				$jobDispatcher->dispatch('PdfToc\Job\ExtractToc',
 					[
