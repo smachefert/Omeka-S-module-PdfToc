@@ -58,10 +58,19 @@ class ExtractToc extends AbstractJob
                 return preg_match("/.*Bookmark.*/", $var);
             });
 
+            // If a title contains a \n the end of the Toc will be crashed
+            $dump_data_array = array_map(function($a) { return chop($a); }, $dump_data_array);
+
+            // ExtractContent expects an array that is contiguous so in case we have filtered
+            // something we need to rebuild the keys to be consecutive
+            $dump_data_array = array_values($dump_data_array );
+
             $content = [];
             $i = 0;
             $this->extractContent($i, 1, $content, $dump_data_array, $content);
             $toc = $this->formatContent($content, "");
+
+            $this->logger->info($toc);
             return json_encode($toc );
         } else {
             return json_encode([]);
@@ -102,7 +111,7 @@ class ExtractToc extends AbstractJob
         $bm_title = str_replace("BookmarkTitle: ", "", $data[$i+1]);
         $bm_level = str_replace("BookmarkLevel: ", "", $data[$i + 2]);
         $bm_page = str_replace("BookmarkPageNumber: ", "", $data[$i + 3]);
-
+        $this->logger->info("TITLE : ".$bm_title);
 
         $newContent['title']   = $bm_title;
         $newContent['level']   = $bm_level;
