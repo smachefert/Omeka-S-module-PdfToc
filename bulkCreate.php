@@ -16,6 +16,17 @@
 	// Should be used to only get application/pdf media
 	// Not working right now, why ?
 	$params = array();
+	$params["media_type"] = "application/pdf";
+	
+	// Use the id of the property Dc:Table of content
+	// We limit to PDF without this property.
+	$params['property'] = [
+		[
+		    'property' => 18,
+		    'type' => 'nex',
+		]
+	];
+		
 	$resultMedia = $api->search('media', $params)->getContent();
 
 	$jobDispatcher = $serviceLocator->get('Omeka\Job\Dispatcher');
