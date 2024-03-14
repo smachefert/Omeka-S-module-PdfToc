@@ -46,9 +46,11 @@ class ExtractToc extends AbstractJob
             $itemData["dcterms:tableOfContents"][] = $tocData;
             $apiManager->update('items', $this->itemId, $itemData, [], ['isPartial' => true, 'collectionAction' => "replace", 'finalize' => false]);
         } elseif ($place_store_toc === "media") {
-            $data = [];
-            $data["dcterms:tableOfContents"][] = $tocData;
-            $apiManager->update('media', $this->mediaId, $data, [], ['isPartial' => true, 'collectionAction' => "replace", 'finalize' => false]);
+            $media = $apiManager->read('media', $this->mediaId);
+            $mediaData = json_decode(json_encode($media->getContent()), true);
+            $mediaData["dcterms:tableOfContents"] = [];
+            $mediaData["dcterms:tableOfContents"][] = $tocData;
+            $apiManager->update('media', $this->mediaId, $mediaData, [], ['isPartial' => true, 'collectionAction' => "replace", 'finalize' => false]);
         }
 
         $this->logger->info("TOC has been stored");
