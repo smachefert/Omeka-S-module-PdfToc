@@ -19,7 +19,7 @@ class ExtractToc extends AbstractJob
      */
     public function perform() {
         $this->logger = $this->getServiceLocator()->get('Omeka\Logger');
-        $this->logger->info("ExtractToc function start");
+        $this->logger->err("ExtractToc function start");
 
         $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
 
@@ -28,16 +28,30 @@ class ExtractToc extends AbstractJob
         $this->filePath = $this->getArg('filePath');
         $this->iiifUrl  = $this->getArg('iiifUrl');
 
-        $toc = $this->pdfToToc($this->filePath );
-        $data = [
-            "dcterms:tableOfContents" => [[
-                "type"=> "literal",
-                "property_id"=> 18,
-                "@value"=> $toc
-            ]],
+        $toc = $this->pdfToToc($this->filePath);
+        $tocData = [
+            "type"=> "literal",
+            "property_id"=> 18,
+            "@value"=> $toc
         ];
 
-        $apiManager->update('media', $this->mediaId, $data, [], ['isPartial' => true, 'collectionAction' => 'replace']);
+        $settings = $this->getServiceLocator()->get('Omeka\Settings');
+        $place_store_toc = $settings->get('place_store_toc');
+
+        $this->logger->info("Place store TOC : ".$place_store_toc);
+        if ($place_store_toc === "item") {
+            $item = $apiManager->read('items', $this->itemId);
+            $itemData = json_decode(json_encode($item->getContent()), true);
+            $itemData["dcterms:tableOfContents"] = [];
+            $itemData["dcterms:tableOfContents"][] = $tocData;
+            $apiManager->update('items', $this->itemId, $itemData, [], ['isPartial' => true, 'collectionAction' => "replace", 'finalize' => false]);
+        } elseif ($place_store_toc === "media") {
+            $data = [];
+            $data["dcterms:tableOfContents"][] = $tocData;
+            $apiManager->update('media', $this->mediaId, $data, [], ['isPartial' => true, 'collectionAction' => "replace", 'finalize' => false]);
+        }
+
+        $this->logger->info("TOC has been stored");
     }
 
     /**
@@ -69,8 +83,6 @@ class ExtractToc extends AbstractJob
             $i = 0;
             $this->extractContent($i, 1, $content, $dump_data_array, $content);
             $toc = $this->formatContent($content, "");
-
-            $this->logger->info($toc);
             return json_encode($toc );
         } else {
             return json_encode([]);
@@ -111,7 +123,6 @@ class ExtractToc extends AbstractJob
         $bm_title = str_replace("BookmarkTitle: ", "", $data[$i+1]);
         $bm_level = str_replace("BookmarkLevel: ", "", $data[$i + 2]);
         $bm_page = str_replace("BookmarkPageNumber: ", "", $data[$i + 3]);
-        $this->logger->info("TITLE : ".$bm_title);
 
         $newContent['title']   = $bm_title;
         $newContent['level']   = $bm_level;
