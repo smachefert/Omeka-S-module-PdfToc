@@ -189,7 +189,7 @@ class ExtractToc extends AbstractJob
                 '@id'   => sprintf('%s/%s',$this->iiifUrl,$this->itemId ). '/range/r' . $r  ,
                 '@type' => "sc:Range",
                 'label' => $link['title'],
-                'canvases' => [$this->iiifUrl . '/' . $this->itemId . '/canvas/p' . $link['numPage']]
+                'canvases' => [$this->iiifUrl . '/2/' . $this->itemId . '/canvas/p' . $link['numPage']]
             ];
 
             if ( key_exists('otherContent', $link) && $link['otherContent'] ) {
